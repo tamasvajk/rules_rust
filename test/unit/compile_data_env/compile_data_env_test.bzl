@@ -54,7 +54,9 @@ def _test_subjects():
         newline = "unix",
     )
 
-    # Standalone test: compile_data with a generated file
+    # Standalone test: compile_data with a generated file.
+    # Tagged manual — this is an analysis test subject, not meant to be
+    # executed by CI's //... pattern.
     rust_test(
         name = "standalone_test",
         srcs = ["test.rs"],
@@ -63,11 +65,13 @@ def _test_subjects():
         rustc_env = {
             "GENERATED_PATH": "$(execpath :gen_file)",
         },
+        tags = ["manual"],
     )
 
     # Crate-wrap test: compile_data with a source file (not generated,
     # to avoid triggering transform_sources which has a separate bug
-    # with crate= + generated compile_data)
+    # with crate= + generated compile_data).
+    # Tagged manual — analysis test subject only.
     rust_library(
         name = "mylib",
         srcs = ["lib.rs"],
@@ -82,6 +86,7 @@ def _test_subjects():
         rustc_env = {
             "DATA_PATH": "$(rootpath data.txt)",
         },
+        tags = ["manual"],
     )
 
 def compile_data_env_test_suite(name):
